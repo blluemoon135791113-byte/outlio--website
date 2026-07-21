@@ -1,26 +1,390 @@
 @import "tailwindcss";
 
+/*
+  OUTLIO — DESIGN TOKENS
+  Base: warm butter-paper cream (matches the logo's cream). Ink: near-black (matches logo square).
+  Accent: deep royal blue — secondary color supplied by the founder, used between text and select areas.
+  NOTE: an earlier purple + rose-pink direction exists; this parchment + royal-blue palette
+  is the founder's current call — confirm before launch.
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #fbfaf6;
+  --panel: #f1efe8;
+  --cream: #f2eee3;
+  --ink: #16150f;
+  --muted: #605e55;
+  --accent: #4f4bff;
+  --accent-deep: #322ed1;
+  --accent-soft: #edecff;
+
+  /* GRADIENT SYSTEM — founder references incoming (soft, premium, glassy) */
+  /* deep, minimal band: near-ink indigo easing into the vivid accent at the far edge */
+  --grad-band: linear-gradient(140deg, #131129 0%, #1c1950 48%, #322ed1 92%, #4f4bff 120%);
+  --grad-halo: radial-gradient(55% 70% at 82% 8%, rgba(79, 75, 255, 0.14), transparent 70%);
+  --grad-glass: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  --grad-glass-card: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 255, 255, 0.35) 100%
+  );
+
+  /* FONT PLACEHOLDER — tasteful system stack until the founder's fonts arrive */
+  --font-display: "Helvetica Neue", "Arial Nova", Helvetica, Arial, ui-sans-serif, system-ui,
+    sans-serif;
+  --font-body: var(--font-display);
 }
 
+/* FONT PLACEHOLDER — final display/body fonts TBD; swap the two vars below in one place */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-panel: var(--panel);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-deep: var(--accent-deep);
+  --color-accent-soft: var(--accent-soft);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--cream);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Gradient helpers (see GRADIENT SYSTEM above) */
+.grad-band {
+  background: var(--grad-band);
+}
+.grad-halo {
+  background: var(--grad-halo);
+}
+
+/* Team card decorations — concentric rings + light beam (dark glass cards) */
+.team-rings {
+  background: repeating-radial-gradient(
+    circle at 50% 26%,
+    rgba(255, 255, 255, 0.05) 0 1px,
+    transparent 1px 54px
+  );
+}
+.team-beam {
+  background: linear-gradient(180deg, transparent, rgba(79, 75, 255, 0.75), transparent);
+}
+
+/* Hide scrollbar on the swipeable offer row (scroll snap keeps it usable) */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll-triggered reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero word cycle - smooth fade animations */
+.hero-main {
+  animation: fade-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-text-slide {
+  animation: slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero-word-fade {
+  animation: word-fade-in 0.8s ease-in-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes word-fade-in {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Bouncy period animation */
+.bouncy-period {
+  animation: bounce-period 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes bounce-period {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+  }
+  70% {
+    transform: translateY(-5px) scale(0.9);
+  }
+  85% {
+    transform: translateY(0) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hero aurora — two soft gradient pools drifting very slowly behind the headline */
+.hero-aurora {
+  background:
+    radial-gradient(42% 55% at 78% 12%, rgba(79, 75, 255, 0.16), transparent 70%),
+    radial-gradient(36% 48% at 12% 80%, rgba(124, 121, 255, 0.1), transparent 70%);
+  animation: aurora-drift 16s ease-in-out infinite alternate;
+}
+@keyframes aurora-drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-3%, 4%, 0) scale(1.12);
+  }
+}
+
+/* Ticker strip */
+.marquee-track {
+  animation: marquee 35s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Animated gradient background */
+@keyframes gradient {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 8s ease infinite;
+}
+
+/* Case-study glass modal */
+.modal-backdrop {
+  animation: backdrop-fade-in 0.3s ease both;
+}
+.modal-panel {
+  animation: panel-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes backdrop-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Glassmorphism card effects */
+.glass-card {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.75) 0%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(79, 75, 255, 0.08);
+}
+
+.glass-card:hover {
+  border-color: rgba(79, 75, 255, 0.4);
+  box-shadow: 0 16px 48px 0 rgba(79, 75, 255, 0.12);
+  transform: translateY(-3px);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark glassmorphism for team cards */
+.glass-card-dark {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-card-dark:hover {
+  border-color: rgba(79, 75, 255, 0.4);
+  box-shadow: 0 16px 48px 0 rgba(79, 75, 255, 0.2);
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Float animation for cards */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Grid stagger animations */
+@keyframes grid-item-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.grid-stagger > * {
+  animation: grid-item-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.grid-stagger > *:nth-child(1) { animation-delay: 0.05s; }
+.grid-stagger > *:nth-child(2) { animation-delay: 0.1s; }
+.grid-stagger > *:nth-child(3) { animation-delay: 0.15s; }
+.grid-stagger > *:nth-child(4) { animation-delay: 0.2s; }
+.grid-stagger > *:nth-child(5) { animation-delay: 0.25s; }
+.grid-stagger > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* FAQ accordion */
+summary::-webkit-details-marker {
+  display: none;
+}
+details .faq-mark {
+  transition: transform 0.3s ease;
+}
+details[open] .faq-mark {
+  transform: rotate(45deg);
+}
+
+/* 3D Flip Card for testimonials */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-word,
+  .hero-land,
+  .marquee-track,
+  .modal-backdrop,
+  .modal-panel {
+    animation: none;
+  }
+  details .faq-mark {
+    transition: none;
+  }
 }
