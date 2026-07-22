@@ -5,6 +5,10 @@ export const metadata: Metadata = {
   title: "Outlio — Hands-on growth accelerator",
   description:
     "You build the product. We build the pipeline. Research-first, human-written outbound for tech startups, SaaS startups, and agencies.",
+  icons: {
+    icon: '/outlio logo.png',
+    apple: '/outlio logo.png',
+  },
 };
 
 export default function RootLayout({
