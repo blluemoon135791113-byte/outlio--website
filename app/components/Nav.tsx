@@ -20,6 +20,7 @@ interface NavProps {
 
 export default function Nav({ homePrefix = "" }: NavProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-paper/90 backdrop-blur-md">
@@ -32,6 +33,7 @@ export default function Nav({ homePrefix = "" }: NavProps) {
           <Image src="/outlio logo.png" alt="Outlio" width={50} height={20} priority className="object-contain rounded-lg" />
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden items-center gap-8 px-8 text-[15px] font-medium md:flex">
           {LINKS.map((l) => (
             <Link key={l.label} href={`${homePrefix}${l.anchor}`} className="transition-colors hover:text-accent">
@@ -88,7 +90,8 @@ export default function Nav({ homePrefix = "" }: NavProps) {
           </Link>
         </nav>
 
-        <div className="relative ml-auto flex items-stretch border-l border-ink">
+        {/* Desktop Book a Call Button */}
+        <div className="relative ml-auto hidden items-stretch border-l border-ink md:flex">
           <span
             aria-hidden
             className="absolute -bottom-[6px] -left-[6px] z-10 size-[10px] rotate-45 bg-ink"
@@ -102,7 +105,74 @@ export default function Nav({ homePrefix = "" }: NavProps) {
             Book a call
           </Link>
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="ml-auto flex items-center px-5 py-3.5 md:hidden"
+          aria-label="Toggle menu"
+        >
+          <div className="flex flex-col gap-1.5">
+            <span className={`block h-0.5 w-6 bg-ink transition-transform ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`block h-0.5 w-6 bg-ink transition-opacity ${isMobileMenuOpen ? 'opacity-0' : ''}`} />
+            <span className={`block h-0.5 w-6 bg-ink transition-transform ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          </div>
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="border-b border-ink bg-paper md:hidden">
+          <nav className="mx-auto max-w-7xl px-6 py-6">
+            <div className="space-y-4">
+              {LINKS.map((l) => (
+                <Link
+                  key={l.label}
+                  href={`${homePrefix}${l.anchor}`}
+                  className="block text-base font-medium transition-colors hover:text-accent"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {l.label}
+                </Link>
+              ))}
+
+              {/* Mobile Services */}
+              <div className="border-t border-ink/10 pt-4">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-muted">Services</p>
+                {SERVICES.map((service) => (
+                  <Link
+                    key={service.name}
+                    href={`${homePrefix}#${service.name.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="block py-2 text-base font-medium transition-colors hover:text-accent"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {service.name}
+                  </Link>
+                ))}
+              </div>
+
+              <Link
+                href="/explainers"
+                className="block text-base font-medium transition-colors hover:text-accent"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Motion Graphic Ads
+              </Link>
+
+              {/* Mobile Book a Call Button */}
+              <Link
+                href="https://calendly.com/blluemoon135791113/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 block rounded-full bg-ink px-6 py-3 text-center text-base font-semibold text-cream transition-colors hover:bg-accent"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Book a call
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
