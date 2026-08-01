@@ -5,10 +5,31 @@ import Footer from "../components/Footer";
 import Reveal from "../components/Reveal";
 import VideoShowcase from "../components/VideoShowcase";
 import ServiceWordCycle from "../components/ServiceWordCycle";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Motion Graphic Ads - Outlio",
-  description: "Motion-graphic ads for SaaS and tech startups - the kind that turn wait, what does it do? into where do I sign up?",
+  title: "SaaS Explainer Videos & Motion Graphics | Outlio",
+  description: "Motion-graphic ads and explainer videos for SaaS and tech startups. Turn 'wait, what does it do?' into 'where do I sign up?' - 60-second videos that convert.",
+  keywords: [
+    "SaaS explainer video",
+    "motion graphics",
+    "explainer video production",
+    "SaaS video marketing",
+    "tech startup videos",
+    "product demo video",
+    "animated explainer video",
+    "B2B video marketing",
+    "software explainer video"
+  ],
+  alternates: {
+    canonical: 'https://outlio.io/explainers',
+  },
+  openGraph: {
+    title: 'SaaS Explainer Videos & Motion Graphics | Outlio',
+    description: 'Motion-graphic ads and explainer videos for SaaS and tech startups',
+    url: 'https://outlio.io/explainers',
+    type: 'website',
+  },
 };
 
 const PROCESS = [
@@ -40,6 +61,7 @@ export default function Explainers() {
   return (
     <>
       <Nav homePrefix="/" />
+      <Breadcrumbs />
       <main>
         {/* ========== E1. HERO ========== */}
         <section className="grad-halo relative overflow-hidden">

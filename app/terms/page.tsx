@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Terms and Conditions — Outlio",
-  description: "The terms governing Outlio's website and Services.",
+  title: "Terms and Conditions | Outlio",
+  description: "The terms governing Outlio's website and Services. Read our terms for outbound sales, lead generation, and video production services.",
+  alternates: {
+    canonical: 'https://outlio.io/terms',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -20,6 +28,7 @@ export default function TermsAndConditions() {
   return (
     <>
       <Nav homePrefix="/" />
+      <Breadcrumbs />
       <main className="mx-auto w-full max-w-3xl px-6 py-20 sm:py-28">
         <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-accent">
           Outlio &middot; Legal

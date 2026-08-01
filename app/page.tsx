@@ -11,6 +11,7 @@ import CaseStudies from "./components/CaseStudies";
 import OfferModal from "./components/OfferModal";
 import TestimonialFlipCard from "./components/TestimonialFlipCard";
 import HeroScrollFade from "./components/HeroScrollFade";
+import FAQSchema from "./components/FAQSchema";
 
 const SERVICES = [
   {
@@ -246,6 +247,7 @@ export default function Home() {
 
   return (
     <>
+      <FAQSchema faqs={FAQS} />
       <Nav />
       <OfferModal
         offer={selectedOffer}

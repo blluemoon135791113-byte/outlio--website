@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import Breadcrumbs from "../components/Breadcrumbs";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Outlio",
-  description: "How Outlio collects, uses, and protects data.",
+  title: "Privacy Policy | Outlio",
+  description: "How Outlio collects, uses, and protects data. Our commitment to privacy and data security for clients and prospects.",
+  alternates: {
+    canonical: 'https://outlio.io/privacy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -20,6 +28,7 @@ export default function PrivacyPolicy() {
   return (
     <>
       <Nav homePrefix="/" />
+      <Breadcrumbs />
       <main className="mx-auto w-full max-w-3xl px-6 py-20 sm:py-28">
         <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-accent">
           Outlio &middot; Legal
