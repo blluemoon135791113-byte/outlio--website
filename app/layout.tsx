@@ -5,6 +5,11 @@ export const metadata: Metadata = {
   title: "Outlio | Proven Sales Systems For Tech Startups and SaaS",
   description:
     "We do research first sales outreach for Tech startups, SaaS startups, and agencies || All human written",
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+  },
   keywords: [
     "outbound sales",
     "lead generation",

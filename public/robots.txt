@@ -1,74 +1,14 @@
-# Outlio - Allow all search engines and AI crawlers
-# We want maximum visibility in search AND AI results (AEO/GEO)
+# Outlio.io - Allow ALL bots (search engines, AI crawlers, trainers)
+# Maximum visibility in traditional search AND AI search results
 
 User-agent: *
 Allow: /
-Content-Signal: search=yes,ai-input=yes,ai-train=yes,use=full
 
-# Explicitly ALLOW AI crawlers (overriding any Cloudflare defaults)
-User-agent: GPTBot
-Allow: /
+# Content signals for AI systems
+Content-Signal: search=yes
+Content-Signal: ai-input=yes
+Content-Signal: ai-train=yes
+Content-Signal: use=full
 
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
-User-agent: CCBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: anthropic-ai
-Allow: /
-
-User-agent: Applebot-Extended
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
-User-agent: meta-externalagent
-Allow: /
-
-User-agent: FacebookBot
-Allow: /
-
-User-agent: Diffbot
-Allow: /
-
-User-agent: Omgilibot
-Allow: /
-
-# Traditional search engines
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
-
-User-agent: DuckDuckBot
-Allow: /
-
-User-agent: Baiduspider
-Allow: /
-
-User-agent: YandexBot
-Allow: /
-
-# Sitemap location
+# Sitemap
 Sitemap: https://outlio.io/sitemap.xml
