@@ -1,0 +1,12 @@
+# Outlio.io - Allow ALL bots (search engines, AI crawlers, trainers)
+# Maximum visibility in traditional search AND AI search results
+
+User-agent: *
+Allow: /
+
+Content-Signal: search=yes
+Content-Signal: ai-input=yes
+Content-Signal: ai-train=yes
+Content-Signal: use=full
+
+Sitemap: https://outlio.io/sitemap.xml
