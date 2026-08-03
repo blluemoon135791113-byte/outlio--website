@@ -8,8 +8,8 @@
   is the founder's current call — confirm before launch.
 */
 :root {
-  --paper: #fbfaf6;
-  --panel: #f1efe8;
+  --paper: #ffffff;
+  --panel: #ffffff;
   --cream: #f2eee3;
   --ink: #16150f;
   --muted: #605e55;
@@ -17,10 +17,10 @@
   --accent-deep: #322ed1;
   --accent-soft: #edecff;
 
-  /* GRADIENT SYSTEM — founder references incoming (soft, premium, glassy) */
+  /* GRADIENT SYSTEM — clean white background */
   /* deep, minimal band: near-ink indigo easing into the vivid accent at the far edge */
   --grad-band: linear-gradient(140deg, #131129 0%, #1c1950 48%, #322ed1 92%, #4f4bff 120%);
-  --grad-halo: radial-gradient(55% 70% at 82% 8%, rgba(79, 75, 255, 0.14), transparent 70%);
+  --grad-halo: transparent;
   --grad-glass: linear-gradient(
     160deg,
     rgba(255, 255, 255, 0.7) 0%,
@@ -36,6 +36,7 @@
   --font-display: "Helvetica Neue", "Arial Nova", Helvetica, Arial, ui-sans-serif, system-ui,
     sans-serif;
   --font-body: var(--font-display);
+  --font-handwriting: "Caveat", "Comic Sans MS", cursive;
 }
 
 /* FONT PLACEHOLDER — final display/body fonts TBD; swap the two vars below in one place */
@@ -56,6 +57,11 @@ html {
 
 body {
   background: var(--paper);
+}
+
+/* Handwriting font utility */
+.font-handwriting {
+  font-family: "Caveat", "Comic Sans MS", cursive;
   color: var(--ink);
   font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
@@ -223,6 +229,28 @@ body {
   animation: gradient 8s ease infinite;
 }
 
+/* Fade in animation for tooltips and modals */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Draw line animation for connections */
+@keyframes drawLine {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
 /* Case-study glass modal */
 .modal-backdrop {
   animation: backdrop-fade-in 0.3s ease both;
@@ -279,6 +307,20 @@ body {
   border-color: rgba(79, 75, 255, 0.4);
   box-shadow: 0 16px 48px 0 rgba(79, 75, 255, 0.2);
   transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Pinboard gentle sway - paper settling on board */
+@keyframes pinboard-sway {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0.4deg);
+  }
+}
+
+.pinboard-gentle-sway {
+  animation: pinboard-sway 8s ease-in-out infinite;
 }
 
 /* Float animation for cards */
@@ -381,7 +423,8 @@ details[open] .faq-mark {
   .hero-land,
   .marquee-track,
   .modal-backdrop,
-  .modal-panel {
+  .modal-panel,
+  .pinboard-gentle-sway {
     animation: none;
   }
   details .faq-mark {

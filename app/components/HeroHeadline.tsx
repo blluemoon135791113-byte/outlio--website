@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 
-const WORDS = ["tech startups", "agencies", "SaaS startups"];
+const WORDS = ["tech startups", "SaaS startups", "agencies"];
 const WORD_MS = 2500;
 
 export default function HeroHeadline() {
@@ -65,23 +65,15 @@ export default function HeroHeadline() {
         <span className="inline-block hero-text-slide" style={{ animationDelay: "0.4s" }}>
           for
         </span>{" "}
-        <span className="relative inline-block whitespace-nowrap text-left align-baseline">
+        <span className="relative inline-block whitespace-nowrap align-baseline" style={{ minWidth: '0' }}>
           {/* width reserved by the longest word so the loop never causes layout shift */}
-          <span aria-hidden className="invisible">
-            SaaS startups.
+          <span aria-hidden className="invisible inline-block">
+            tech startups.
           </span>
-          <span key={index} className="absolute inset-y-0 left-0 text-accent hero-word-fade">
+          <span key={index} className="absolute inset-0 flex items-baseline text-accent hero-word-fade">
             {WORDS[index]}.
           </span>
         </span>
-      </span>
-      {/* the outcome statement — always visible beneath the looping line */}
-      <span
-        className="hero-text-slide mt-5 block text-[0.52em] leading-tight tracking-tight"
-        style={{ animationDelay: "0.55s" }}
-      >
-        You build the product.{" "}
-        <span className="text-accent">We build the pipeline.</span>
       </span>
     </h1>
   );

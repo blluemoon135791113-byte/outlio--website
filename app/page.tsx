@@ -11,6 +11,15 @@ import CaseStudies from "./components/CaseStudies";
 import OfferModal from "./components/OfferModal";
 import TestimonialFlipCard from "./components/TestimonialFlipCard";
 import HeroScrollFade from "./components/HeroScrollFade";
+import InteractiveWorldMap from "./components/InteractiveWorldMap";
+import AnimatedArrow from "./components/AnimatedArrow";
+import HeroWidgets from "./components/HeroWidgets";
+import PinboardWidgetA from "./components/PinboardWidgetA";
+import PinboardWidgetB from "./components/PinboardWidgetB";
+import OrbitalCaseStudies from "./components/OrbitalCaseStudies";
+import Starfield from "./components/Starfield";
+import MeteorShower from "./components/MeteorShower";
+import StarFieldCanvas from "./components/StarFieldCanvas";
 import FAQSchema from "./components/FAQSchema";
 
 const SERVICES = [
@@ -259,85 +268,161 @@ export default function Home() {
       />
       <main>
         {/* ========== 1. HERO ========== */}
-        <section className="grad-halo relative overflow-hidden">
-          <div className="mx-auto max-w-7xl px-6 pb-10 pt-8 sm:px-10 sm:pt-12">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-accent">
-              Outlio &middot; Hands-on growth accelerator
-            </p>
-            <div className="mt-3">
-              <HeroHeadline />
-            </div>
-            <HeroScrollFade>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-                Outlio isn't a consultancy. We research your market, write every message by hand, and
-                run your outbound ourselves, then show you all of it, live, in a shared CRM.
-              </p>
-            </HeroScrollFade>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
-              {/* SUPPLIED SEPARATELY: founder's scheduling link */}
-              <Link
-                href="https://calendly.com/blluemoon135791113/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-ink px-8 py-4 text-base font-semibold text-cream transition-colors hover:bg-accent"
-              >
-                Book a call
-              </Link>
-              <Link
-                href="#results"
-                className="rounded-full border border-ink px-8 py-4 text-base font-semibold transition-colors hover:bg-ink hover:text-cream"
-              >
-                See the results
-              </Link>
-            </div>
-            <p className="mt-3 text-sm text-muted">
-              First week only, before any monthly commitment. If we underperform, you don't pay.
-            </p>
-          </div>
-
-          {/* Modern glassmorphic marquee strip */}
-          <div className="relative border-y border-white/20 py-6 overflow-hidden" aria-hidden>
-            {/* Animated gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-accent/5 via-accent/10 to-accent/5 animate-gradient" />
-
-            {/* Glassmorphic overlay */}
+        <section className="relative px-4 py-6 sm:px-6 lg:px-8">
+          {/* Contained Hero Card */}
+          <div className="relative mx-auto max-w-[1600px] overflow-hidden rounded-3xl border border-gray-200/60 bg-gradient-to-br from-gray-50 to-white shadow-xl shadow-black/5">
+            {/* Subtle dot pattern texture */}
             <div
-              className="absolute inset-0 backdrop-blur-sm"
+              className="pointer-events-none absolute inset-0"
               style={{
-                background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.4) 100%)',
-                backdropFilter: 'blur(12px) saturate(150%)',
-                WebkitBackdropFilter: 'blur(12px) saturate(150%)'
+                backgroundImage: 'radial-gradient(circle, rgba(0, 0, 0, 0.10) 1.2px, transparent 1.2px)',
+                backgroundSize: '14px 14px',
               }}
             />
 
-            <div className="relative overflow-hidden">
-              <div className="marquee-track flex w-max items-center gap-12 px-12 text-sm font-semibold uppercase tracking-[0.18em]">
-                {Array.from({ length: 3 }).map((_, i) => (
-                  <span key={i} className="flex items-center gap-12">
-                    {[
-                      "Research-first outbound",
-                      "Every message written by hand",
-                      "Live shared CRM",
-                      "The one-week deal",
-                      "No autopilot",
-                    ].map((t) => (
-                      <span key={t} className="flex items-center gap-12">
-                        <span className="relative">
-                          <span className="relative z-10 bg-gradient-to-r from-ink to-accent bg-clip-text text-transparent">
-                            {t}
+            {/* Corner Widgets with 3D depth */}
+            <HeroWidgets />
+
+            {/* Main Content - CENTERED */}
+            <div className="relative z-20 flex min-h-[700px] items-center justify-center px-8 py-24 sm:px-12 lg:min-h-[800px] lg:px-16 lg:py-32">
+              <div className="mx-auto max-w-5xl text-center">
+                <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-accent">
+                  Outlio &middot; Hands-on growth accelerator
+                </p>
+                <div className="mt-3">
+                  <HeroHeadline />
+                </div>
+                <HeroScrollFade>
+                  <p className="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-muted sm:text-lg">
+                    Outlio isn't a consultancy. We research your market, write every message by hand, and
+                    run your outbound ourselves, then show you all of it, live, in a shared CRM.
+                  </p>
+                </HeroScrollFade>
+                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                  <Link
+                    href="https://calendly.com/blluemoon135791113/30min"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="rounded-full bg-ink px-8 py-4 text-base font-semibold text-cream transition-colors hover:bg-accent"
+                  >
+                    Book a call
+                  </Link>
+                  <Link
+                    href="#results"
+                    className="rounded-full border border-ink px-8 py-4 text-base font-semibold transition-colors hover:bg-ink hover:text-cream"
+                  >
+                    See the results
+                  </Link>
+                </div>
+                <p className="mt-4 text-sm text-muted">
+                  First week only, before any monthly commitment. If we underperform, you don't pay.
+                </p>
+              </div>
+            </div>
+
+            {/* Marquee strip at bottom */}
+            <div className="relative border-t border-gray-200/60 bg-purple-50/50 py-6 overflow-hidden" aria-hidden="true">
+              <div className="relative overflow-hidden">
+                <div className="marquee-track flex w-max items-center gap-12 px-12 text-sm font-semibold uppercase tracking-[0.18em]">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <span key={i} className="flex items-center gap-12">
+                      {[
+                        "Research-first outbound",
+                        "Every message written by hand",
+                        "Live shared CRM",
+                        "The one-week deal",
+                        "No autopilot",
+                      ].map((t) => (
+                        <span key={t} className="flex items-center gap-12">
+                          <span className="text-gray-800">{t}</span>
+                          <span className="relative">
+                            <span className="block size-1.5 rounded-full bg-accent/60" />
                           </span>
                         </span>
-                        <span className="relative">
-                          <span className="absolute inset-0 size-2 animate-pulse rounded-full bg-accent/30 blur-sm" />
-                          <span className="relative block size-2 rounded-full bg-accent shadow-lg shadow-accent/50" />
-                        </span>
-                      </span>
-                    ))}
-                  </span>
-                ))}
+                      ))}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
+        </section>
+
+
+        {/* ========== 7. RESULTS — full dark galaxy background ========== */}
+        <section id="results" className="scroll-mt-24 relative overflow-hidden"
+          style={{
+            background: "radial-gradient(ellipse at 50% 40%, #0d1117 0%, #010409 50%, #000000 100%)",
+          }}
+        >
+          {/* Meteor shower layer */}
+          <MeteorShower />
+
+          {/* Dense concentrated star field across entire section */}
+          <StarFieldCanvas />
+
+          {/* Starfield with hero stars — bottom-left, feathered edges */}
+          <div className="absolute bottom-[15%] left-[3%] pointer-events-none" aria-hidden="true"
+            style={{
+              maskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+              WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 75%)",
+            }}
+          >
+            <Starfield />
+          </div>
+
+          {/* Nebula clouds — dim, realistic */}
+          <div className="absolute top-[8%] right-[3%] w-[400px] h-[250px] rounded-full pointer-events-none" aria-hidden="true" style={{
+            background: "radial-gradient(ellipse at 40% 50%, rgba(60,40,100,0.04) 0%, rgba(40,25,80,0.02) 40%, transparent 70%)",
+            transform: "rotate(-12deg)",
+            filter: "blur(30px)",
+          }} />
+          <div className="absolute top-[50%] left-[0%] w-[320px] h-[180px] rounded-full pointer-events-none" aria-hidden="true" style={{
+            background: "radial-gradient(ellipse at 60% 40%, rgba(80,40,90,0.035) 0%, rgba(50,25,70,0.015) 50%, transparent 70%)",
+            transform: "rotate(20deg)",
+            filter: "blur(25px)",
+          }} />
+          <div className="absolute top-[25%] right-[10%] w-[220px] h-[140px] rounded-full pointer-events-none" aria-hidden="true" style={{
+            background: "radial-gradient(ellipse, rgba(30,50,120,0.03) 0%, rgba(20,35,90,0.015) 50%, transparent 70%)",
+            transform: "rotate(8deg)",
+            filter: "blur(20px)",
+          }} />
+          <div className="absolute bottom-[20%] right-[5%] w-[280px] h-[160px] rounded-full pointer-events-none" aria-hidden="true" style={{
+            background: "radial-gradient(ellipse at 30% 60%, rgba(50,30,80,0.03) 0%, rgba(35,20,60,0.015) 45%, transparent 70%)",
+            transform: "rotate(-25deg)",
+            filter: "blur(28px)",
+          }} />
+          <div className="absolute top-[70%] left-[15%] w-[200px] h-[120px] rounded-full pointer-events-none" aria-hidden="true" style={{
+            background: "radial-gradient(ellipse, rgba(70,50,110,0.025) 0%, transparent 60%)",
+            transform: "rotate(35deg)",
+            filter: "blur(22px)",
+          }} />
+
+          {/* Cosmic dust — faint horizontal wisps */}
+          <div className="absolute top-[18%] left-0 w-full h-[2px] pointer-events-none" aria-hidden="true" style={{
+            background: "linear-gradient(to right, transparent 8%, rgba(100,80,140,0.08) 25%, rgba(60,50,100,0.04) 50%, rgba(100,80,140,0.06) 75%, transparent 92%)",
+            filter: "blur(3px)",
+          }} />
+          <div className="absolute top-[60%] left-0 w-full h-[2px] pointer-events-none" aria-hidden="true" style={{
+            background: "linear-gradient(to right, transparent 12%, rgba(80,60,120,0.06) 30%, rgba(50,40,90,0.03) 55%, rgba(80,60,120,0.05) 78%, transparent 90%)",
+            filter: "blur(4px)",
+          }} />
+          <div className="absolute top-[85%] left-0 w-full h-[1px] pointer-events-none" aria-hidden="true" style={{
+            background: "linear-gradient(to right, transparent 5%, rgba(90,70,130,0.05) 20%, rgba(60,45,100,0.03) 60%, transparent 95%)",
+            filter: "blur(2px)",
+          }} />
+
+          <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 sm:px-10 sm:pt-20 pb-6 sm:pb-8">
+            <Reveal>
+              <h2 className="max-w-3xl text-4xl font-black uppercase leading-tight tracking-tight sm:text-5xl text-white">
+                You asked for the numbers, and so the numbers have spoken
+              </h2>
+            </Reveal>
+          </div>
+
+          {/* Orbital Case Studies */}
+          <OrbitalCaseStudies />
+
         </section>
 
         {/* ========== 2. PROBLEM ========== */}
@@ -362,97 +447,11 @@ export default function Home() {
               ))}
             </div>
             <Reveal delay={200} className="lg:sticky lg:top-32 lg:self-start">
-              <div
-                className="p-8 sm:p-10 rounded-3xl backdrop-blur-xl border border-white/30 shadow-xl transition-all duration-500 hover:border-accent/40 hover:shadow-2xl hover:shadow-accent/10"
-                style={{
-                  background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 100%)',
-                  backdropFilter: 'blur(24px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(24px) saturate(180%)'
-                }}
-              >
-                <p className="text-2xl font-bold leading-snug tracking-tight sm:text-3xl">
-                  It was never the product. There's just no engine behind it.
-                </p>
-                <Link href="#services" className="mt-6 inline-flex items-center gap-2 text-base font-semibold text-accent">
-                  That's the part we build. <span aria-hidden>&rarr;</span>
-                </Link>
-              </div>
+              <InteractiveWorldMap />
             </Reveal>
           </div>
         </section>
 
-        {/* ========== OFFERS ========== */}
-        <section id="offer" className="scroll-mt-24 border-t border-ink/10 bg-panel/50">
-          <div className="mx-auto max-w-7xl px-6 py-24 sm:px-10 sm:py-32">
-            <Reveal>
-              <h2 className="text-4xl font-bold uppercase tracking-tight sm:text-6xl">
-                Here's what <span className="text-accent">"done-for-you"</span> actually means.
-              </h2>
-              <p className="mt-5 max-w-xl text-lg text-muted">
-                No mystery scope. The mix is tailored on your proposal call, but this is the machine you're plugging into.
-              </p>
-            </Reveal>
-
-            {/* Offers grid, horizontal layout */}
-            <div className="mt-16 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {OFFERS.map((offer, i) => (
-                <Reveal key={offer.name} delay={i * 100} className="h-full">
-                  <div
-                    className="group relative flex h-full w-full flex-col overflow-hidden rounded-3xl border border-white/30 p-8 backdrop-blur-xl transition-all duration-500 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/10"
-                    style={{
-                      background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.45) 100%)',
-                      backdropFilter: 'blur(24px) saturate(180%)',
-                      WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-                      minHeight: '550px'
-                    }}
-                  >
-                    {/* Decorative SVG */}
-                    <div className="absolute right-6 top-6 opacity-10 transition-all duration-500 group-hover:opacity-20 group-hover:scale-110">
-                      <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
-                        <rect x="5" y="5" width="40" height="40" rx="8" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
-                        <circle cx="25" cy="25" r="8" fill="currentColor" opacity="0.2" />
-                      </svg>
-                    </div>
-
-                    <div className="relative flex flex-col flex-1">
-                      {offer.featured && (
-                        <span className="inline-block rounded-full bg-accent px-3 py-1 text-xs font-semibold uppercase tracking-widest text-cream mb-4 w-fit">
-                          Most Popular
-                        </span>
-                      )}
-                      <h3 className="text-2xl font-bold tracking-tight sm:text-3xl">{offer.name}</h3>
-                      <p className="mt-3 text-base font-medium leading-relaxed text-ink">{offer.tagline}</p>
-
-                      <ul className="mt-6 space-y-2.5 flex-1">
-                        {offer.features.map((feature) => (
-                          <li key={feature} className="flex gap-2 text-sm leading-snug text-muted">
-                            <span aria-hidden className="mt-[5px] size-1.5 shrink-0 rounded-full bg-accent" />
-                            <span>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <Link
-                        href="https://calendly.com/blluemoon135791113/30min"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-6 inline-block w-full rounded-full bg-accent px-6 py-3 text-center text-sm font-semibold text-white transition-all hover:bg-accent-deep"
-                      >
-                        I need this
-                      </Link>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-
-            <Reveal>
-              <p className="mt-8 text-center text-sm text-muted">
-                No prices here on purpose, every engagement is scoped on the call. Everything above is execution, not advice.
-              </p>
-            </Reveal>
-          </div>
-        </section>
 
         {/* ========== SERVICES ========== */}
         <section id="services" className="scroll-mt-24 border-t border-ink/10">
@@ -561,11 +560,11 @@ export default function Home() {
                 }}
               >
                 <p className="text-3xl font-bold leading-snug tracking-tight sm:text-5xl">
-                  A human writing 200 personalized messages will always sound{" "}
-                  <span className="text-accent">more human</span> than AI writing 200.
+                  A human writing 50 personalized messages a day, will{" "}
+                  <span className="text-accent">outpace, outlast, and outwin</span> an LLM writing 200
                 </p>
                 <p className="mt-6 text-lg text-muted">
-                  That's not a hot take. That's our whole operating model.
+                  That's not theory. It's a game-plan.
                 </p>
               </blockquote>
             </Reveal>
@@ -648,53 +647,6 @@ export default function Home() {
             </Reveal>
           </div>
         </section>
-
-        {/* ========== 7. RESULTS ========== */}
-        <section id="results" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24 sm:px-10 sm:py-32">
-          <Reveal>
-            <h2 className="max-w-3xl text-4xl font-bold uppercase leading-tight tracking-tight sm:text-5xl">
-              Numbers we can show you <span className="text-accent">the receipts for.</span>
-            </h2>
-          </Reveal>
-
-          {/* static stat row, no animated counters */}
-          <div className="mt-14 grid gap-px overflow-hidden border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:grid-cols-5">
-            {STATS.map((s, i) => (
-              <Reveal key={s.value} delay={i * 60} className="h-full">
-                <div
-                  className="flex h-full flex-col p-6 backdrop-blur-xl border border-white/30 transition-all duration-500 hover:border-accent/40 hover:shadow-lg hover:shadow-accent/10"
-                  style={{
-                    background: 'linear-gradient(160deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%)',
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    WebkitBackdropFilter: 'blur(20px) saturate(180%)'
-                  }}
-                >
-                  <p className="text-2xl font-bold tracking-tight text-accent">{s.value}</p>
-                  <p className="mt-2 text-sm leading-snug text-muted">{s.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <div className="mt-14">
-            <CaseStudies />
-          </div>
-
-          <Reveal>
-            <div className="mt-12 flex flex-wrap items-center gap-4">
-              <Link
-                href="https://calendly.com/blluemoon135791113/30min"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-ink px-8 py-4 font-semibold text-cream transition-colors hover:bg-accent"
-              >
-                Book a call
-              </Link>
-              <span className="text-muted">or click any card to read the full story</span>
-            </div>
-          </Reveal>
-        </section>
-
         {/* ========== 8. TESTIMONIALS ========== */}
         <section className="border-t border-ink/10 bg-panel/50">
           <div className="mx-auto max-w-7xl px-6 py-24 sm:px-10 sm:py-32">
@@ -725,29 +677,6 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
-            <Reveal>
-              <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden border border-ink/10 bg-ink/10 sm:grid-cols-4">
-                {[
-                  { name: "Addx Studio", src: "/clients/addx.png" },
-                  { name: "Click Labs", src: "/clients/clicklabs.png" },
-                  { name: "Knowledge City", src: "/clients/knowledgecity.png" },
-                  { name: "Motionisr", src: "/clients/motionisr.png" },
-                ].map((c) => (
-                  <div key={c.name} className="flex h-28 flex-col items-center justify-center gap-2 bg-white px-6">
-                    <Image
-                      src={c.src}
-                      alt={c.name}
-                      width={140}
-                      height={56}
-                      className="max-h-12 w-auto object-contain"
-                    />
-                    <span className="text-[10px] font-medium uppercase tracking-widest text-muted">
-                      {c.name}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
           </div>
         </section>
 
@@ -758,6 +687,7 @@ export default function Home() {
               <h2 className="text-4xl font-bold uppercase leading-tight tracking-tight sm:text-5xl">
                 The questions you're <span className="text-accent">already thinking.</span>
               </h2>
+              <AnimatedArrow />
             </Reveal>
             <div className="divide-y divide-ink/10 border-y border-ink/10">
               {FAQS.map((f, i) => (
