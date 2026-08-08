@@ -39,3 +39,27 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ---------------------------------------------------------------------------
+# REAL SAVED LEAD PAGES — NEVER COMMIT
+# These contain real people's personal data (GDPR/UK GDPR). They are kept
+# locally for selector validation and golden-file tests only.
+#
+# DENY ALL .html BY DEFAULT, then re-allow ONLY the fabricated fixture
+# directory. Name-based patterns were not enough — a real page saved as
+# "bad list navigator .html" slipped past a "*Sales Navigator*" rule.
+# No .html file is tracked in this repo, so a blanket deny costs nothing.
+# ---------------------------------------------------------------------------
+*.html
+!tests/fixtures/html/
+!tests/fixtures/html/**/*.html
+
+private/
+**/real-pages/
+*_files/
+
+# scraper binaries and reverse-engineering artifacts
+*.rar
+*.exe
+*.pyc
+__pycache__/

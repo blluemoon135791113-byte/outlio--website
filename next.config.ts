@@ -1,6 +1,23 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import type { NextConfig } from "next";
 
+/*
+  Turbopack infers the workspace root by walking up for a lockfile. There is a
+  stray package-lock.json in the user's home directory (an accidental install),
+  so it was selecting ~ as the root — which broadened filesystem watching and
+  emitted a warning on every dev/build.
+
+  Pinning root to this directory is the documented fix.
+*/
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: projectRoot,
+  },
+
   /* config options here */
   images: {
     formats: ['image/avif', 'image/webp'],

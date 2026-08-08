@@ -9,6 +9,19 @@ const eslintConfig = defineConfig([
     rules: {
       // Marketing copy is used verbatim from the copy deck; raw apostrophes render fine.
       "react/no-unescaped-entities": "off",
+
+      // Honour the leading-underscore convention for intentionally unused
+      // bindings. Interface implementations (e.g. PaymentProvider) must accept
+      // parameters they do not use; renaming them would break the contract.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
+      ],
     },
   },
   // Override default ignores of eslint-config-next.

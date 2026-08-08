@@ -1,0 +1,206 @@
+import 'server-only'
+
+/**
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║  THE SINGLE SOURCE OF ACCESS TRUTH.                                      ║
+ * ║                                                                          ║
+ * ║  Every protected page, Server Action, and Route Handler calls one of      ║
+ * ║  getAccessContext / requireAccess / requireAdmin.                        ║
+ * ║                                                                          ║
+ * ║  No route re-derives access logic. No client component decides access.   ║
+ * ║  A grep for role comparisons outside this file is a bug.                 ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
+ */
+import { redirect } from 'next/navigation'
+
+import {
+  NEEDS_LIMITS,
+  decideLimits,
+  precheckAccess,
+  type AccessReason,
+} from '@/lib/auth/decide'
+import { AppError } from '@/lib/errors/catalog'
+import { getPlanById, type Plan } from '@/lib/limits/plans'
+import { getUsageSnapshot, type UsageSnapshot } from '@/lib/limits/usage'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
+import type { ProfileRow, UserRole } from '@/types/database'
+
+export type { AccessReason } from '@/lib/auth/decide'
+
+export type AccessContext = {
+  userId: string | null
+  email: string | null
+  role: UserRole | null
+  canUseScraper: boolean
+  reason: AccessReason
+  isAdmin: boolean
+  plan: Plan | null
+  usage: UsageSnapshot | null
+  accessExpiresAt: string | null
+  profile: ProfileRow | null
+}
+
+const UNAUTHENTICATED: AccessContext = {
+  userId: null,
+  email: null,
+  role: null,
+  canUseScraper: false,
+  reason: 'unauthenticated',
+  isAdmin: false,
+  plan: null,
+  usage: null,
+  accessExpiresAt: null,
+  profile: null,
+}
+
+/**
+ * Resolve the caller's full access context.
+ *
+ * Never throws for an ordinary "no access" outcome — it returns a context with
+ * `canUseScraper: false` and a specific `reason`. Callers that need to block
+ * should use `requireAccess` / `requireAdmin`.
+ */
+export async function getAccessContext(): Promise<AccessContext> {
+  const supabase = await createClient()
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  if (!user) return UNAUTHENTICATED
+
+  // Supabase marks this when the verification link is followed.
+  const emailVerified = Boolean(user.email_confirmed_at)
+
+  // Service role: RLS is bypassed, so scoping by id here is mandatory.
+  const admin = createAdminClient()
+  const { data: profileRow, error } = await admin
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (error) {
+    throw new Error(`getAccessContext: profile lookup failed: ${error.message}`)
+  }
+
+  const profile = (profileRow as ProfileRow | null) ?? null
+
+  if (!profile || profile.deleted_at) {
+    return { ...UNAUTHENTICATED, userId: user.id, email: user.email ?? null }
+  }
+
+  const isAdmin = profile.role === 'admin'
+
+  const base = (
+    plan: Plan | null,
+    usage: UsageSnapshot | null,
+  ): Omit<AccessContext, 'canUseScraper' | 'reason'> => ({
+    userId: user.id,
+    email: user.email ?? null,
+    role: profile.role,
+    isAdmin,
+    plan,
+    usage,
+    accessExpiresAt: profile.access_expires_at,
+    profile,
+  })
+
+  // The decision itself lives in lib/auth/decide.ts as a pure function, so
+  // every branch is unit-tested without a request context. This function only
+  // gathers the inputs.
+  //
+  // Pre-checks run FIRST and need no plan or usage. That saves two round trips
+  // for users who are going to be denied anyway, and — more importantly — means
+  // an outage in the usage tables cannot take down sign-in or verify-email.
+  const pre = precheckAccess({ profile, emailVerified })
+  if (pre !== NEEDS_LIMITS) {
+    return { ...base(null, null), ...pre }
+  }
+
+  const plan = profile.plan_id ? await getPlanById(profile.plan_id) : null
+  const usage = await getUsageSnapshot(user.id)
+
+  return { ...base(plan, usage), ...decideLimits(plan?.limits ?? null, usage) }
+}
+
+/** Maps a denial reason onto the catalog error a route should return. */
+export function reasonToError(reason: AccessReason): AppError {
+  switch (reason) {
+    case 'unauthenticated':
+      return new AppError('ERR_UNAUTHENTICATED')
+    case 'email_unverified':
+      return new AppError('ERR_EMAIL_UNVERIFIED')
+    case 'pending':
+      return new AppError('ERR_ACCESS_PENDING')
+    case 'rejected':
+      return new AppError('ERR_ACCESS_REJECTED')
+    case 'expired':
+      return new AppError('ERR_ACCESS_EXPIRED')
+    case 'suspended':
+      return new AppError('ERR_ACCOUNT_SUSPENDED')
+    case 'limit_reached':
+      return new AppError('ERR_LIMIT_REACHED')
+    case 'payment_required':
+      return new AppError('ERR_PAYMENT_REQUIRED')
+    case 'no_request':
+      return new AppError('ERR_NO_ACCESS')
+    case 'ok':
+      return new AppError('ERR_INTERNAL', 'reasonToError called with reason=ok')
+  }
+}
+
+/**
+ * For Server Components and pages. Redirects rather than throwing, so the user
+ * lands somewhere useful instead of on an error boundary.
+ */
+export async function requireAccess(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (ctx.canUseScraper) return ctx
+
+  if (ctx.reason === 'unauthenticated') redirect('/sign-in')
+  if (ctx.reason === 'email_unverified') redirect('/verify-email')
+  redirect(`/dashboard/access?reason=${ctx.reason}`)
+}
+
+/**
+ * For Server Components and pages that require an authenticated user but not
+ * necessarily extraction access (e.g. the access-request page itself).
+ */
+export async function requireUser(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (!ctx.userId) redirect('/sign-in')
+  return ctx
+}
+
+/** For admin pages. Admin status comes from `profiles.role`, never a claim. */
+export async function requireAdmin(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (!ctx.userId) redirect('/sign-in')
+  if (!ctx.isAdmin) redirect('/dashboard')
+  return ctx
+}
+
+/**
+ * For Route Handlers and Server Actions, where redirecting is wrong.
+ * Throws a typed AppError the caller converts with `toClientError`.
+ */
+export async function assertAccess(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (!ctx.canUseScraper) throw reasonToError(ctx.reason)
+  return ctx
+}
+
+export async function assertUser(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (!ctx.userId) throw new AppError('ERR_UNAUTHENTICATED')
+  return ctx
+}
+
+export async function assertAdmin(): Promise<AccessContext> {
+  const ctx = await getAccessContext()
+  if (!ctx.userId) throw new AppError('ERR_UNAUTHENTICATED')
+  if (!ctx.isAdmin) throw new AppError('ERR_FORBIDDEN')
+  return ctx
+}

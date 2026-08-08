@@ -71,6 +71,11 @@ export const metadata: Metadata = {
     google: 'your-google-verification-code',
     yandex: 'your-yandex-verification-code',
   },
+  other: {
+    // Meta Business Manager domain verification. Emits:
+    // <meta name="facebook-domain-verification" content="…" />
+    'facebook-domain-verification': 'ss238e8hnhulelvvh1c3z15nomghtj',
+  },
 };
 
 export default function RootLayout({

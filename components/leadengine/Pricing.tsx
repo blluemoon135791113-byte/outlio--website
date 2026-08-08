@@ -1,0 +1,211 @@
+import Link from 'next/link'
+
+/**
+ * Pricing — a CREDIT model.
+ *
+ * 1 credit per extraction run, 1 per CSV export. These numbers mirror
+ * `plans.limits` seeded in migration 0015; if you change one, change the other.
+ * The app reads limits from the database at runtime and never from this file.
+ */
+
+type Tier = {
+  key: string
+  name: string
+  blurb: string
+  price: string
+  period: string
+  credits: string
+  features: string[]
+  cta: { label: string; href: string }
+  featured?: boolean
+  badge?: string
+}
+
+const TIERS: Tier[] = [
+  {
+    key: 'starter',
+    name: 'Lead Engine',
+    blurb: 'For steady, weekly prospecting.',
+    price: '$38',
+    period: '/ month',
+    credits: '100 credits',
+    features: [
+      '**100 extractions** a month',
+      '**10 files** per batch',
+      'Roughly 25 leads per Sales Navigator page',
+      'Duplicate removal across every upload',
+      'CSV export included',
+    ],
+    cta: { label: 'Start your 3-day free trial', href: '/sign-up' },
+  },
+  {
+    key: 'professional',
+    name: 'Pro',
+    blurb: 'For teams running lists every day.',
+    price: '$73',
+    period: '/ month',
+    credits: '300 credits',
+    features: [
+      '**300 extractions** a month',
+      '**30 files** per batch',
+      'Everything in Lead Engine',
+      'Longer export retention (90 days)',
+      'Priority support',
+    ],
+    cta: { label: 'Get Pro plan', href: '/sign-up?plan=professional' },
+    featured: true,
+    badge: 'Most popular',
+  },
+  {
+    key: 'custom',
+    name: 'Custom',
+    blurb: 'For agencies and high-volume teams.',
+    price: '1000+',
+    period: 'credits',
+    credits: '1000+ credits',
+    features: [
+      '**1000+ extractions** a month',
+      '**50 files** per batch',
+      'Everything in Pro',
+      'Retention and limits set with you',
+      'Direct line to the team',
+    ],
+    cta: { label: 'Contact us', href: 'mailto:husnain@outlio.io?subject=Outlio%20Lead%20Engine%20—%20Custom%20plan' },
+  },
+]
+
+/** Renders **bold** segments without dangerouslySetInnerHTML. */
+function RichText({ value }: { value: string }) {
+  const parts = value.split(/(\*\*[^*]+\*\*)/g)
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.startsWith('**') && part.endsWith('**') ? (
+          <strong key={i} className="font-semibold text-ink">
+            {part.slice(2, -2)}
+          </strong>
+        ) : (
+          <span key={i}>{part}</span>
+        ),
+      )}
+    </>
+  )
+}
+
+export function Pricing() {
+  return (
+    <section id="pricing" className="scroll-mt-20 bg-paper px-4 py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl">
+        <div className="text-center">
+          <p className="text-[13px] font-semibold uppercase tracking-[0.22em] text-accent">
+            Pricing
+          </p>
+          <h2 className="mt-4 text-4xl font-bold uppercase leading-tight tracking-tight sm:text-5xl">
+            Pay for what you pull
+          </h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+            One credit per extraction, one per export. A typical page of 25 leads
+            costs two credits from upload to spreadsheet.
+          </p>
+        </div>
+
+        <div className="mt-14 grid gap-6 lg:grid-cols-3">
+          {TIERS.map((tier) => (
+            <div
+              key={tier.key}
+              className={
+                tier.featured
+                  ? 'relative flex flex-col rounded-[var(--radius-xl)] border-2 border-accent bg-panel p-8 shadow-[var(--shadow-lg)]'
+                  : 'relative flex flex-col rounded-[var(--radius-xl)] border border-border bg-panel p-8'
+              }
+            >
+              {tier.badge ? (
+                <span className="absolute -top-3 left-8 rounded-full bg-accent px-3 py-0.5 text-[11px] font-bold uppercase tracking-[0.16em] text-cream">
+                  {tier.badge}
+                </span>
+              ) : null}
+
+              <h3 className="text-2xl font-bold tracking-tight">{tier.name}</h3>
+              <p className="mt-1.5 text-sm text-muted">{tier.blurb}</p>
+
+              <p className="mt-6 flex items-baseline gap-2">
+                <span className="text-5xl font-black tracking-tight">{tier.price}</span>
+                <span className="text-base font-medium text-muted">{tier.period}</span>
+              </p>
+
+              <p className="mt-2 inline-flex w-fit rounded-full bg-accent-soft px-3 py-1 text-[12px] font-bold uppercase tracking-[0.14em] text-accent">
+                {tier.credits}
+              </p>
+
+              <ul className="mt-7 flex-1 space-y-3 text-base">
+                {tier.features.map((f) => (
+                  <li key={f} className="flex gap-2.5 text-muted">
+                    <Tick />
+                    <span>
+                      <RichText value={f} />
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA centred within the card, per spec. */}
+              <div className="mt-8 flex justify-center">
+                <Link
+                  href={tier.cta.href}
+                  className={
+                    tier.featured
+                      ? 'w-full rounded-[var(--radius-md)] bg-accent px-5 py-3 text-center text-base font-semibold text-cream transition-colors duration-150 hover:bg-accent-deep'
+                      : 'w-full rounded-[var(--radius-md)] border border-ink px-5 py-3 text-center text-base font-semibold text-ink transition-colors duration-150 hover:bg-cream'
+                  }
+                >
+                  {tier.cta.label}
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mx-auto mt-10 max-w-2xl rounded-[var(--radius-lg)] border border-border bg-panel p-5">
+          <h3 className="text-base font-semibold text-ink">How credits work</h3>
+          <ul className="mt-2.5 space-y-1.5 text-sm leading-relaxed text-muted">
+            <li>
+              <strong className="font-semibold text-ink">1 credit</strong> — one
+              extraction run, however many files are in the batch
+            </li>
+            <li>
+              <strong className="font-semibold text-ink">1 credit</strong> — one CSV
+              export
+            </li>
+            <li>Credits reset at the start of each month. Unused credits do not roll over.</li>
+            <li>
+              The <strong className="font-semibold text-ink">3-day free trial</strong>{' '}
+              includes 10 credits and 5 files per batch — no card required.
+            </li>
+          </ul>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-muted">
+          Access is approved manually so we can keep an eye on how the tool is used.
+          You will normally hear back the same day.
+        </p>
+      </div>
+    </section>
+  )
+}
+
+function Tick() {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 20 20"
+      className="mt-1 h-4 w-4 shrink-0 text-accent"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.8 3.8 6.8-6.8a1 1 0 0 1 1.4 0Z"
+        clipRule="evenodd"
+      />
+    </svg>
+  )
+}

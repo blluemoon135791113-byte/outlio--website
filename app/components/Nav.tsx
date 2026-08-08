@@ -90,12 +90,32 @@ export default function Nav({ homePrefix = "" }: NavProps) {
           </Link>
         </nav>
 
-        {/* Desktop Book a Call Button */}
+        {/* Desktop CTAs */}
         <div className="relative ml-auto hidden items-stretch border-l border-ink md:flex">
           <span
             aria-hidden
             className="absolute -bottom-[6px] -left-[6px] z-10 size-[10px] rotate-45 bg-ink"
           />
+          {/* Product entry point. Accent-filled so it reads as the newer,
+              self-serve path next to the sales-led "Book a call". */}
+          <Link
+            href="/leadengine"
+            className="flex items-center gap-2 border-r border-ink bg-accent px-6 text-[15px] font-semibold text-cream transition-colors hover:bg-accent-deep"
+          >
+            Try Outlio&apos;s Lead Engine
+            <svg
+              aria-hidden
+              viewBox="0 0 20 20"
+              className="size-3.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M4 10h11M11 5l5 5-5 5" />
+            </svg>
+          </Link>
           <Link
             href="https://calendly.com/blluemoon135791113/30min"
             target="_blank"
@@ -159,12 +179,19 @@ export default function Nav({ homePrefix = "" }: NavProps) {
                 Motion Graphic Ads
               </Link>
 
-              {/* Mobile Book a Call Button */}
+              {/* Mobile CTAs */}
+              <Link
+                href="/leadengine"
+                className="mt-4 block rounded-full bg-accent px-6 py-3 text-center text-base font-semibold text-cream transition-colors hover:bg-accent-deep"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Try Outlio&apos;s Lead Engine
+              </Link>
               <Link
                 href="https://calendly.com/blluemoon135791113/30min"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 block rounded-full bg-ink px-6 py-3 text-center text-base font-semibold text-cream transition-colors hover:bg-accent"
+                className="mt-3 block rounded-full bg-ink px-6 py-3 text-center text-base font-semibold text-cream transition-colors hover:bg-accent"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Book a call

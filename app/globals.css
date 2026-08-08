@@ -37,6 +37,38 @@
     sans-serif;
   --font-body: var(--font-display);
   --font-handwriting: "Caveat", "Comic Sans MS", cursive;
+
+  /* ==========================================================================
+     PRODUCT TOKENS — added for the authenticated app (see docs/DESIGN_TOKENS.md)
+     Additive only. No existing landing-page value is changed.
+     ========================================================================== */
+
+  /* Borders — the landing page uses ad-hoc `border-ink/10`; this names it. */
+  --border: #e6e3da;
+  --border-strong: #d2cec2;
+
+  /* Radius scale — none existed before. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Elevation — soft and accent-tinted, matching the landing page's feel,
+     but without backdrop-filter (too expensive over scrolling tables). */
+  --shadow-sm: 0 1px 2px 0 rgba(22, 21, 15, 0.05);
+  --shadow-md: 0 4px 12px 0 rgba(22, 21, 15, 0.07);
+  --shadow-lg: 0 12px 32px 0 rgba(22, 21, 15, 0.1);
+
+  /* Status colors — required for job states (completed / partially_completed /
+     failed) and validation feedback. The landing page has no status palette. */
+  --success: #16794a;
+  --success-soft: #e6f4ed;
+  --warning: #8a5a00;
+  --warning-soft: #fdf3e0;
+  --danger: #b3261e;
+  --danger-soft: #fdecea;
+  --info: #1f5fa8;
+  --info-soft: #e8f1fb;
 }
 
 /* FONT PLACEHOLDER — final display/body fonts TBD; swap the two vars below in one place */
@@ -49,6 +81,18 @@
   --color-accent: var(--accent);
   --color-accent-deep: var(--accent-deep);
   --color-accent-soft: var(--accent-soft);
+
+  /* Product tokens — see :root above */
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
 }
 
 html {
