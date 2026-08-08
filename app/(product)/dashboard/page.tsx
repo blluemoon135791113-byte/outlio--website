@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { requireAccess } from '@/lib/auth/access'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export const metadata: Metadata = {
   title: 'Dashboard | Outlio',
@@ -14,6 +15,12 @@ export const metadata: Metadata = {
  */
 export default async function DashboardPage() {
   const ctx = await requireAccess()
+
+  // Credits are the unit the user actually pays in, so they lead the overview.
+  const { data: balanceRows } = await createAdminClient().rpc('credit_balance', {
+    p_user_id: ctx.userId!,
+  })
+  const balance = Array.isArray(balanceRows) ? balanceRows[0] : null
 
   const limits = ctx.plan?.limits
   const usage = ctx.usage
@@ -30,8 +37,13 @@ export default async function DashboardPage() {
 
       <section
         aria-label="Usage this period"
-        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+        className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
       >
+        <UsageCard
+          label="Credits remaining"
+          value={balance?.remaining ?? 0}
+          limit={balance?.allowance ?? null}
+        />
         <UsageCard
           label="Extractions today"
           value={usage?.extractionsToday ?? 0}

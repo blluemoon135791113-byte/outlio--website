@@ -54,6 +54,26 @@ export async function getDownloadUrlAction(
     return { status: 'error', message: 'That export is not available.' }
   }
 
+  /*
+   * Spend the export credit.
+   *
+   * Charged once per DOWNLOAD, per the pricing model. Deliberately charged
+   * before signing, so a failure to pay never yields a usable URL. Admins are
+   * exempt inside consume_credit.
+   */
+  const { data: remainingRaw } = await supabase.rpc('consume_credit', {
+    p_user_id: ctx.userId!,
+    p_amount: 1,
+  })
+
+  if (typeof remainingRaw === 'number' && remainingRaw < 0) {
+    return {
+      status: 'error',
+      message:
+        "You're out of credits for this month. Upgrade your plan or wait for the reset.",
+    }
+  }
+
   const { data: signed, error } = await supabase.storage
     .from(EXPORT_BUCKET)
     .createSignedUrl(job.export_storage_path, SIGNED_URL_TTL, {

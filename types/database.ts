@@ -430,6 +430,24 @@ export type Database = {
         Args: { p_older_than_minutes?: number }
         Returns: { enqueued: number; failed: number }[]
       }
+      consume_credit: {
+        Args: {
+          p_user_id: string
+          p_amount?: number
+          p_period_start?: string
+          p_period_end?: string
+        }
+        /** Remaining balance, or -1 when there were not enough credits. */
+        Returns: number
+      }
+      credit_balance: {
+        Args: { p_user_id: string }
+        Returns: { allowance: number; used: number; remaining: number }[]
+      }
+      expired_export_paths: {
+        Args: { p_limit?: number }
+        Returns: { job_id: string; user_id: string; export_storage_path: string }[]
+      }
       purge_job_leads: {
         Args: { p_job_id: string; p_user_id: string }
         /** Number of lead rows deleted. */

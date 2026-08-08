@@ -243,6 +243,37 @@ export async function finalizeUploadAction(input: {
     .update({ file_count: queued, progress_total: queued })
     .eq('id', jobId.data)
 
+  /*
+   * Spend the extraction credit BEFORE enqueuing.
+   *
+   * consume_credit is an atomic check-and-spend that rolls itself back when the
+   * balance is insufficient, so two concurrent uploads cannot both take the last
+   * credit. Charging here rather than in the worker means the user is told
+   * immediately, and a job is never queued that they cannot pay for.
+   */
+  const { data: creditsRaw } = await supabase.rpc('consume_credit', {
+    p_user_id: ctx.userId!,
+    p_amount: 1,
+  })
+  const creditsLeft = typeof creditsRaw === 'number' ? creditsRaw : -1
+
+  if (creditsLeft < 0) {
+    await supabase
+      .from('extraction_jobs')
+      .update({
+        status: 'failed',
+        error_code: 'ERR_LIMIT_REACHED',
+        error_message: 'Not enough credits.',
+      })
+      .eq('id', jobId.data)
+
+    return {
+      ok: false,
+      message:
+        "You're out of credits for this month. Upgrade your plan or wait for the reset.",
+    }
+  }
+
   await supabase.rpc('increment_usage', {
     p_user_id: ctx.userId!,
     p_metric: 'files',

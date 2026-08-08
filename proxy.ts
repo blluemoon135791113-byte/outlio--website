@@ -19,7 +19,58 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 const PROTECTED_PREFIXES = ['/dashboard', '/admin']
 
+/**
+ * The product subdomain. `app.outlio.io/` serves the dashboard.
+ *
+ * ⚠️ AUTH COOKIES ARE PER-HOST, DELIBERATELY.
+ *
+ * Supabase sets the session cookie for the host that issued it, so a session
+ * created on `outlio.io` is NOT readable on `app.outlio.io`. That is the safer
+ * arrangement: widening the cookie to `.outlio.io` would send session tokens to
+ * the marketing site and every future subdomain along with it.
+ *
+ * The consequence is that users sign in ON the app subdomain. `/leadengine`
+ * links to `/sign-up`, which resolves on whichever host they are already on.
+ */
+const APP_HOST = process.env.NEXT_PUBLIC_APP_HOST ?? 'app.outlio.io'
+
+/** Paths the app subdomain serves. Everything else there redirects to the app. */
+const APP_SUBDOMAIN_PATHS = [
+  '/dashboard',
+  '/admin',
+  '/sign-in',
+  '/sign-up',
+  '/verify-email',
+  '/forgot-password',
+  '/reset-password',
+  '/auth',
+  '/api',
+]
+
 export async function proxy(request: NextRequest) {
+  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase() ?? ''
+  const { pathname: rawPath } = request.nextUrl
+
+  if (host === APP_HOST) {
+    // Bare subdomain root goes straight to the product.
+    if (rawPath === '/') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
+    }
+
+    // Marketing routes do not belong on the app host — send them to the
+    // canonical site rather than serving duplicate content on two domains.
+    const isAppPath = APP_SUBDOMAIN_PATHS.some(
+      (p) => rawPath === p || rawPath.startsWith(`${p}/`),
+    )
+    const isAsset = rawPath.startsWith('/_next') || rawPath.includes('.')
+
+    if (!isAppPath && !isAsset) {
+      return NextResponse.redirect(new URL(rawPath, 'https://outlio.io'))
+    }
+  }
+
   let response = NextResponse.next({ request })
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
